@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import './App.css'; // Stil dosyasını içe aktar
+import { fetchMovies } from './services/OmdbService';
+import MovieCard from './components/MovieCard';
 
-function App() {
+const App = () => {
+  const [movies, setMovies] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const results = await fetchMovies('Batman');
+      setMovies(results);
+    };
+
+    fetchData();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div className="app">
+      <header className="app-header">
+        <h1>Film Listesi</h1>
       </header>
+      <div className="movie-grid">
+        {movies.map(movie => (
+          <MovieCard key={movie.imdbID} movie={movie} />
+        ))}
+      </div>
     </div>
   );
-}
+};
 
 export default App;
